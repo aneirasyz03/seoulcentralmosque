@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "date": "2026-09-02",
+    "title": "Tafsir Al-Qur'an",
+    "time": "19:30",
+    "location": "Main Hall",
+    "enabled": true
+  },
+  {
+    "id": "2",
+    "date": "2026-09-04",
+    "title": "Friday Khutbah",
+    "time": "12:10",
+    "location": "Main Prayer Hall",
+    "enabled": true
+  },
+  {
+    "id": "3",
+    "date": "2026-09-06",
+    "title": "Islamic Study Circle",
+    "time": "09:00",
+    "location": "Classroom",
+    "enabled": true
+  }
+]

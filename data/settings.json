@@ -1,0 +1,52 @@
+{
+  "prayer": {
+    "method": 3,
+    "school": 0,
+    "timezone": "Asia/Seoul",
+    "latitude": 37.5333,
+    "longitude": 126.9975,
+    "adjustments": {
+      "Fajr": 0,
+      "Dhuhr": 0,
+      "Asr": 0,
+      "Maghrib": 0,
+      "Isha": 0
+    },
+    "iqamah": {
+      "Fajr": 10,
+      "Dhuhr": 10,
+      "Asr": 10,
+      "Maghrib": 7,
+      "Isha": 10
+    },
+    "adhanEnabled": true,
+    "adhanAudio": "assets/audio/adhan.mp3",
+    "adhanDurationSeconds": 180,
+    "prayerInProgressDurationMinutes": 15
+  },
+  "display": {
+    "slideshowIntervalSeconds": 12,
+    "transition": "fade",
+    "showWeather": true,
+    "showQuotes": true,
+    "showAnnouncements": true
+  },
+  "ramadan": {
+    "enabled": false,
+    "year": 1448
+  },
+  "friday": {
+    "enabled": true,
+    "khatib": "",
+    "imam": "",
+    "muadzin": "",
+    "khutbahTopic": "",
+    "khutbahTime": "12:10",
+    "jumuahPrayerTime": "12:40"
+  },
+  "donation": {
+    "qrisImage": "",
+    "bankInfo": "",
+    "message": "Support Seoul Central Mosque. Donations help maintain the mosque and community programs."
+  }
+}

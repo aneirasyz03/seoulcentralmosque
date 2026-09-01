@@ -1,0 +1,43 @@
+{
+  "mosque": {
+    "name": "Seoul Central Mosque",
+    "address": "39 Usadan-ro 10-gil, Yongsan District, Seoul, South Korea",
+    "area": "Itaewon (Hannam-dong)"
+  },
+  "route": {
+    "subway": "Line 6",
+    "station": "Itaewon Station",
+    "exit": "Exit 3",
+    "walk_minutes": 10
+  },
+  "theme": {
+    "dominant": [
+      "#FFFFFF",
+      "#F8F9FA"
+    ],
+    "structure": [
+      "#0A192F",
+      "#1A2530"
+    ],
+    "accent": [
+      "#00A8E8",
+      "#D4AF37"
+    ]
+  },
+  "prayer": {
+    "provider": "AlAdhan API",
+    "method": 3,
+    "use_device_location": true,
+    "fallback": {
+      "latitude": 37.5665,
+      "longitude": 126.978
+    }
+  },
+  "history": [
+    1950,
+    1969,
+    1974,
+    1976,
+    1990
+  ]
+}

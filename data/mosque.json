@@ -1,0 +1,23 @@
+{
+  "name": "Seoul Central Mosque",
+  "nameKo": "서울중앙성원",
+  "nameAr": "مسجد سول المركزي",
+  "address": "39 Usadan-ro 10-gil, Yongsan-gu, Seoul, South Korea",
+  "area": "Itaewon / Hannam-dong",
+  "district": "Yongsan-gu",
+  "coordinates": {
+    "lat": 37.5333,
+    "lng": 126.9975
+  },
+  "timezone": "Asia/Seoul",
+  "phone": "02-793-6908",
+  "website": "http://www.koreaislam.org",
+  "googleMaps": "https://www.google.com/maps/search/?api=1&query=Seoul+Central+Mosque%2C+39+Usadan-ro+10-gil%2C+Yongsan-gu%2C+Seoul",
+  "route": {
+    "subway": "Line 6",
+    "station": "Itaewon Station",
+    "exit": "Exit 3",
+    "walkMinutes": 10,
+    "walkNote": "Walk uphill via Usadan-ro 10-gil to the main mosque gate."
+  }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0A192F">
+  <title>Seoul Central Mosque — Display</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.display-body { cursor: none; }
+    body.display-body.show-cursor { cursor: default; }
+  </style>
+</head>
+<body class="display-body">
+  <div class="display-wrap">
+    <header class="display-header">
+      <div class="brand">
+        <span class="brand-mark" style="color:var(--gold)">☪</span>
+        <span><b>Seoul Central Mosque</b><small>서울중앙성원</small></span>
+      </div>
+      <div id="dispClock" style="font-size:18px;font-weight:700;letter-spacing:.04em;"></div>
+    </header>
+
+    <main class="display-main">
+      <div class="display-label" id="dispLabel">NEXT PRAYER</div>
+      <div class="display-name" id="dispName">—</div>
+      <div class="display-countdown" id="dispCountdown">-- : -- : --</div>
+      <div class="display-time" id="dispTime"></div>
+      <div id="dispSub" style="margin-top:18px;color:#aab6c7;font-size:14px;font-weight:600;"></div>
+    </main>
+
+    <footer class="display-footer">
+      <div class="display-schedule" id="dispSchedule"></div>
+      <div id="dispDate" style="color:#aab6c7;font-size:13px;"></div>
+    </footer>
+  </div>
+
+  <script src="js/prayer-engine.js"></script>
+  <script>
+    const $ = s => document.querySelector(s);
+    let settings = {}, engine = null;
+
+    async function loadJSON(p, fb) {
+      try { const r = await fetch(p); return await r.json(); } catch { return fb; }
+    }
+    function pad(n){ return String(n).padStart(2,"0"); }
+
+    async function fetchSchedule() {
+      const lat = 37.5333, lng = 126.9975, method = 3;
+      const now = getSeoulNow();
+      const date = `${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()}`;
+      try {
+        const url = `https://api.aladhan.com/v1/timings/${date}?latitude=${lat}&longitude=${lng}&method=${method}&timezonestring=Asia/Seoul`;
+        const j = await (await fetch(url)).json();
+        const t = j.data.timings;
+        return { Fajr:t.Fajr.slice(0,5), Dhuhr:t.Dhuhr.slice(0,5), Asr:t.Asr.slice(0,5), Maghrib:t.Maghrib.slice(0,5), Isha:t.Isha.slice(0,5) };
+      } catch {
+        return { Fajr:"04:38", Dhuhr:"12:03", Asr:"15:42", Maghrib:"18:07", Isha:"19:18" };
+      }
+    }
+
+    function onUpdate(s) {
+      $("#dispLabel").textContent = s.label;
+      $("#dispName").textContent = s.name;
+      $("#dispCountdown").textContent = s.countdown;
+      $("#dispTime").textContent = s.time || "";
+      $("#dispSub").textContent = s.sub || "";
+      const sch = s.schedule || {};
+      $("#dispSchedule").innerHTML = ["Fajr","Dhuhr","Asr","Maghrib","Isha"].map(n =>
+        `<span>${n}<b>${sch[n]||"--:--"}</b></span>`).join("");
+    }
+
+    function tickClock() {
+      const now = getSeoulNow();
+      $("#dispClock").textContent = now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false,timeZone:"Asia/Seoul"});
+      $("#dispDate").textContent = now.toLocaleDateString("en-GB",{weekday:"long",year:"numeric",month:"long",day:"numeric",timeZone:"Asia/Seoul"});
+    }
+
+    // auto-hide cursor
+    let cursorTimer;
+    function showCursor() {
+      document.body.classList.add("show-cursor");
+      clearTimeout(cursorTimer);
+      cursorTimer = setTimeout(() => document.body.classList.remove("show-cursor"), 3000);
+    }
+    document.addEventListener("mousemove", showCursor);
+    document.addEventListener("touchstart", showCursor);
+
+    (async () => {
+      settings = await loadJSON("data/settings.json", {});
+      try {
+        const st = localStorage.getItem("scm_settings");
+        if (st) settings = Object.assign({}, settings, JSON.parse(st));
+      } catch {}
+      engine = new PrayerEngine(settings);
+      engine.onUpdate(onUpdate);
+      const schedule = await fetchSchedule();
+      engine.setSchedule(schedule);
+      engine.start();
+      tickClock();
+      setInterval(tickClock, 1000);
+    })();
+  </script>
+</body>
+</html>

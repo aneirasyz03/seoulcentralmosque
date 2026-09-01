@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Seoul Central Mosque</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-nav">
+      <div class="brand" style="margin-bottom:24px;color:#fff;">
+        <span class="brand-mark" style="color:var(--gold)">☪</span>
+        <span><b>Admin</b><small>Seoul Central</small></span>
+      </div>
+      <a href="#prayer" class="active">Prayer</a>
+      <a href="#iqamah">Iqamah</a>
+      <a href="#friday">Friday</a>
+      <a href="#ramadan">Ramadan</a>
+      <a href="#donation">Donation</a>
+      <a href="#display">Display</a>
+      <a href="index.html">← Back to site</a>
+      <a href="display.html" target="_blank">Open TV Display</a>
+    </aside>
+    <main class="admin-main">
+      <h1 style="margin-top:0;font-family:'Playfair Display',serif;">Admin Panel</h1>
+      <p style="color:var(--muted);font-size:14px;">Settings are stored in <code>localStorage</code> for this browser (GitHub Pages static). Use Export / Import JSON to move configuration. For a shared database, connect Firebase or Supabase later.</p>
+
+      <div class="admin-card" id="prayer">
+        <h3>Prayer Settings</h3>
+        <label>Calculation method (AlAdhan)</label>
+        <select id="method">
+          <option value="3">Muslim World League</option>
+          <option value="2">Islamic Society of North America</option>
+          <option value="4">Umm Al-Qura</option>
+          <option value="5">Egyptian General Authority</option>
+          <option value="1">University of Islamic Sciences, Karachi</option>
+        </select>
+        <label>Latitude</label>
+        <input id="lat" type="number" step="0.0001" value="37.5333">
+        <label>Longitude</label>
+        <input id="lng" type="number" step="0.0001" value="126.9975">
+        <label>Timezone</label>
+        <input id="tz" value="Asia/Seoul" readonly>
+        <label>Adhan enabled</label>
+        <select id="adhanEnabled"><option value="true">Yes</option><option value="false">No</option></select>
+        <label>Adhan duration (seconds)</label>
+        <input id="adhanSec" type="number" value="180">
+        <label>Prayer-in-progress duration (minutes)</label>
+        <input id="inProgMin" type="number" value="15">
+      </div>
+
+      <div class="admin-card" id="iqamah">
+        <h3>Iqamah Duration (minutes)</h3>
+        <label>Fajr</label><input id="iqFajr" type="number" value="10">
+        <label>Dhuhr</label><input id="iqDhuhr" type="number" value="10">
+        <label>Asr</label><input id="iqAsr" type="number" value="10">
+        <label>Maghrib</label><input id="iqMaghrib" type="number" value="7">
+        <label>Isha</label><input id="iqIsha" type="number" value="10">
+      </div>
+
+      <div class="admin-card" id="friday">
+        <h3>Friday / Jumu’ah</h3>
+        <p style="font-size:13px;color:var(--muted);">Leave empty to show “Not configured”. Do not invent names.</p>
+        <label>Khatib</label><input id="khatib" placeholder="Not configured">
+        <label>Imam</label><input id="imam" placeholder="Not configured">
+        <label>Muadzin</label><input id="muadzin" placeholder="Not configured">
+        <label>Khutbah topic</label><input id="khutbahTopic" placeholder="Not configured">
+        <label>Khutbah time</label><input id="khutbahTime" value="12:10">
+        <label>Jumu’ah prayer time</label><input id="jumuahTime" value="12:40">
+      </div>
+
+      <div class="admin-card" id="ramadan">
+        <h3>Ramadan Mode</h3>
+        <label>Enabled</label>
+        <select id="ramadanEnabled"><option value="false">Off</option><option value="true">On</option></select>
+        <label>Hijri year</label><input id="ramadanYear" type="number" value="1448">
+      </div>
+
+      <div class="admin-card" id="donation">
+        <h3>Donation / QRIS</h3>
+        <p style="font-size:13px;color:var(--muted);">Do not use fake QRIS. Path to local image after upload, e.g. assets/images/qris.png</p>
+        <label>QRIS image path</label><input id="qrisPath" placeholder="assets/images/qris.png">
+        <label>Bank information</label><textarea id="bankInfo" rows="2"></textarea>
+        <label>Donation message</label><textarea id="donMsg" rows="2"></textarea>
+      </div>
+
+      <div class="admin-card" id="display">
+        <h3>Save &amp; Export</h3>
+        <div class="admin-actions">
+          <button class="btn primary" id="btnSave">Save to this browser</button>
+          <button class="btn ghost" id="btnExport">Export JSON</button>
+          <button class="btn ghost" id="btnImport">Import JSON</button>
+          <input type="file" id="importFile" accept="application/json" style="display:none">
+        </div>
+        <p id="saveStatus" style="font-size:13px;margin-top:12px;color:var(--muted);"></p>
+      </div>
+    </main>
+  </div>
+  <script>
+    const $ = s => document.querySelector(s);
+    function load() {
+      let s = {};
+      try { s = JSON.parse(localStorage.getItem("scm_settings") || "{}"); } catch {}
+      const p = s.prayer || {};
+      const iq = p.iqamah || {};
+      const fr = s.friday || {};
+      const r = s.ramadan || {};
+      const d = s.donation || {};
+      $("#method").value = p.method || 3;
+      $("#lat").value = p.latitude || 37.5333;
+      $("#lng").value = p.longitude || 126.9975;
+      $("#adhanEnabled").value = String(p.adhanEnabled !== false);
+      $("#adhanSec").value = p.adhanDurationSeconds || 180;
+      $("#inProgMin").value = p.prayerInProgressDurationMinutes || 15;
+      $("#iqFajr").value = iq.Fajr ?? 10;
+      $("#iqDhuhr").value = iq.Dhuhr ?? 10;
+      $("#iqAsr").value = iq.Asr ?? 10;
+      $("#iqMaghrib").value = iq.Maghrib ?? 7;
+      $("#iqIsha").value = iq.Isha ?? 10;
+      $("#khatib").value = fr.khatib || "";
+      $("#imam").value = fr.imam || "";
+      $("#muadzin").value = fr.muadzin || "";
+      $("#khutbahTopic").value = fr.khutbahTopic || "";
+      $("#khutbahTime").value = fr.khutbahTime || "12:10";
+      $("#jumuahTime").value = fr.jumuahPrayerTime || "12:40";
+      $("#ramadanEnabled").value = String(!!r.enabled);
+      $("#ramadanYear").value = r.yearHijri || 1448;
+      $("#qrisPath").value = d.qrisImage || "";
+      $("#bankInfo").value = d.bankInfo || "";
+      $("#donMsg").value = d.message || "";
+    }
+    function collect() {
+      return {
+        prayer: {
+          method: Number($("#method").value),
+          latitude: Number($("#lat").value),
+          longitude: Number($("#lng").value),
+          timezone: "Asia/Seoul",
+          adhanEnabled: $("#adhanEnabled").value === "true",
+          adhanDurationSeconds: Number($("#adhanSec").value),
+          prayerInProgressDurationMinutes: Number($("#inProgMin").value),
+          iqamah: {
+            Fajr: Number($("#iqFajr").value),
+            Dhuhr: Number($("#iqDhuhr").value),
+            Asr: Number($("#iqAsr").value),
+            Maghrib: Number($("#iqMaghrib").value),
+            Isha: Number($("#iqIsha").value)
+          },
+          adjustments: { Fajr:0, Dhuhr:0, Asr:0, Maghrib:0, Isha:0 }
+        },
+        friday: {
+          khatib: $("#khatib").value.trim(),
+          imam: $("#imam").value.trim(),
+          muadzin: $("#muadzin").value.trim(),
+          khutbahTopic: $("#khutbahTopic").value.trim(),
+          khutbahTime: $("#khutbahTime").value,
+          jumuahPrayerTime: $("#jumuahTime").value
+        },
+        ramadan: {
+          enabled: $("#ramadanEnabled").value === "true",
+          yearHijri: Number($("#ramadanYear").value)
+        },
+        donation: {
+          qrisImage: $("#qrisPath").value.trim(),
+          bankInfo: $("#bankInfo").value.trim(),
+          message: $("#donMsg").value.trim()
+        }
+      };
+    }
+    $("#btnSave").onclick = () => {
+      const data = collect();
+      localStorage.setItem("scm_settings", JSON.stringify(data));
+      $("#saveStatus").textContent = "Saved to this browser’s localStorage.";
+    };
+    $("#btnExport").onclick = () => {
+      const blob = new Blob([JSON.stringify(collect(), null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "scm-settings.json";
+      a.click();
+    };
+    $("#btnImport").onclick = () => $("#importFile").click();
+    $("#importFile").onchange = (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        try {
+          localStorage.setItem("scm_settings", r.result);
+          load();
+          $("#saveStatus").textContent = "Imported successfully.";
+        } catch (err) {
+          $("#saveStatus").textContent = "Import failed.";
+        }
+      };
+      r.readAsText(f);
+    };
+    load();
+  </script>
+</body>
+</html>

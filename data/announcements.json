@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "title": "Welcome to Seoul Central Mosque",
+    "content": "Visitors are welcome. Please dress modestly and maintain quiet during prayer times.",
+    "date": "2026-09-01",
+    "time": "00:00",
+    "duration": 30,
+    "priority": "normal",
+    "displayType": "banner",
+    "enabled": true
+  }
+]

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect fill="#F8F9FA" width="1200" height="675"/>
+  <rect fill="#0A192F" x="400" y="280" width="400" height="220" rx="8"/>
+  <circle fill="#00A8E8" cx="600" cy="240" r="80"/>
+  <rect fill="#D4AF37" x="580" y="160" width="40" height="40"/>
+  <text x="600" y="540" text-anchor="middle" font-family="system-ui,sans-serif" font-size="28" fill="#0A192F" font-weight="700">Seoul Central Mosque</text>
+  <text x="600" y="575" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#667085">Replace with real licensed photo · assets/images/</text>
+</svg>

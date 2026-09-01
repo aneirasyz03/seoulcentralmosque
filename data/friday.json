@@ -1,0 +1,9 @@
+{
+  "khatib": "",
+  "imam": "",
+  "muadzin": "",
+  "khutbahTopic": "",
+  "khutbahTime": "12:10",
+  "jumuahPrayerTime": "12:40",
+  "note": "Fields left empty will display as 'Not configured'."
+}
